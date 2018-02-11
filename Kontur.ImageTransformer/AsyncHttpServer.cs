@@ -125,20 +125,13 @@ namespace Kontur.ImageTransformer
             finally
             {
                 listenerContext.Response.OutputStream.Close();
-                RecalcRequestDeclining(watch.ElapsedMilliseconds);
+                await Task.Run(() => RecalcRequestDeclining(watch.ElapsedMilliseconds));
             }
         }
 
         private static Task<Bitmap> ApplyFilterAsync(Bitmap bitmap, Func<Bitmap, Bitmap> filter)
         {
             return Task.Run(() => filter(bitmap));
-        }
-
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
-        {
-            var percentile95 = Get95Percentile(latencies);
-            Console.WriteLine("percentile : {0}, latencies.count : {1}", percentile95, latencies.Count);
-            declineRequests = percentile95 > 1000;
         }
 
         private long Get95Percentile(List<long> latencyData)
