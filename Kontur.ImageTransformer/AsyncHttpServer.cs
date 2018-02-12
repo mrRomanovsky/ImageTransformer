@@ -155,7 +155,6 @@ namespace Kontur.ImageTransformer
             {
                 RecalcLatencies(miliseconds);
                 var percentile95 = Get95Percentile(latencies);
-                Console.WriteLine(percentile95);
                 declineRequests = percentile95 > 700;
             }
         }
